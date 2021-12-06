@@ -31,23 +31,23 @@ try
             }
         }
 
-        char[] gammeBinaryCharArr = new char[zeroCount.Length];
+        char[] gammaBinaryCharArr = new char[zeroCount.Length];
         char[] epsilonBinaryCharArr = new char[zeroCount.Length];
 
         for (int i = 0; i < bitCount; i++)
         {
-            gammeBinaryCharArr[i] = zeroCount[i] > oneCount[i] ? '0' : '1';
+            gammaBinaryCharArr[i] = zeroCount[i] > oneCount[i] ? '0' : '1';
             epsilonBinaryCharArr[i] = zeroCount[i] < oneCount[i] ? '0' : '1';
         }
 
-        var gammaBinaryString = new string(gammeBinaryCharArr);
+        var gammaBinaryString = new string(gammaBinaryCharArr);
         var epsilonBinaryString = new string(epsilonBinaryCharArr);
-        Console.WriteLine("gammaString: " + gammaBinaryString);
-        Console.WriteLine("epsilonString: " + epsilonBinaryString);
-
+        Console.WriteLine("            gammaString: " + gammaBinaryString);
+        Console.WriteLine("          epsilonString: " + epsilonBinaryString);
         uint gamma = Convert.ToUInt32(gammaBinaryString, 2);
         uint epsilon = Convert.ToUInt32(epsilonBinaryString, 2);
         uint epsilonBitwise = ((1 << 12) - 1) ^ gamma;
+        Console.WriteLine("epsilonString (bitwise): " + Convert.ToString(epsilonBitwise, 2));
         uint powerConsumption = gamma * epsilon;
         uint powerConsumptionBitwise = gamma * epsilonBitwise;
         Console.WriteLine($"powerConsumption: {powerConsumption}");
