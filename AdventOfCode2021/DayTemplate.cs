@@ -8,7 +8,7 @@ namespace AdventOfCode2021;
 
 internal class Day6 : DayBase
 {
-    public Day6(int day) : base(day) { }
+    public Day6(int year, int day, string title) : base(day) { }
 
     //public async Task<DayBase> Init()
     //{

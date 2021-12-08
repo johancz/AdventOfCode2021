@@ -19,7 +19,7 @@ if (input == null)
 
 try
 {
-    Console.WriteLine("Day 4: Hydrothermal Venture\n");
+    Console.WriteLine("Day 6: Lanternfish\n");
 
     Console.WriteLine($"Initial state: {string.Join(',', input)}");
 

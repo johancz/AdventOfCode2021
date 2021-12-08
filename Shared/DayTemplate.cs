@@ -1,12 +1,15 @@
-﻿using Shared;
-using System.Collections;
-using System.Numerics;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿//using Shared;
+//using System.Collections;
+//using System.Collections.Concurrent;
+//using System.Numerics;
+//using System.Text;
+//using System.Text.RegularExpressions;
 
-//int day = 6;
-////string[] input = await Utils.GetInput(2021, day);
-//string[] input = await Utils.ReadInputFile($@".\InputFiles\input-2021-{day}-exampledata.txt");
+//int __year = 2021;
+//int __day = 6;
+//string[] input = await Utils.GetInput(__year, __day);
+//string[] input = await Utils.ReadInputFile($@".\InputFiles\input-{__year}-{__day}-exampledata.txt");
+//string[] input = new string[] { await Utils.GetExampleInput(__year, __day) };
 
 //if (input == null)
 //{

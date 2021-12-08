@@ -70,7 +70,7 @@ namespace Shared
             {
                 // Web scraping stuff
                 HtmlWeb web = new HtmlWeb();
-                HtmlDocument doc = web.Load("https://adventofcode.com/2021/day/6");
+                HtmlDocument doc = web.Load($"https://adventofcode.com/{year}/day/{day}");
 
                 // File stuff
                 string? directoryName = Path.GetDirectoryName(inputFilePath);

@@ -1,4 +1,5 @@
 ﻿using Shared;
+using System.Text.RegularExpressions;
 
 string[] input = await Utils.GetInput(2021, 2);
 
@@ -40,6 +41,25 @@ try
         Console.WriteLine($"Final Horizontal: {finalHorizontal}");
         Console.WriteLine($"Final Depth: {finalDepth}");
         Console.WriteLine($"Multiplied: {finalHorizontal * finalDepth}");
+    }
+
+    // 1st task (alt)
+    {
+        var commandGroups = input.GroupBy(x =>
+        {
+            var match = Regex.Match(x, @" *(\w+) *(\d+) *");
+            return match;
+        });
+        var a = input.GroupBy(x => Regex.Match(x, @" *(\w+) *(\d+) *").Groups[1].Value, (key, g) => new { Id = key, Count = g.Count() });
+        var b = input.GroupBy(x =>
+        {
+            return Regex.Match(x, @" *(\w+) *(\d+) *").Groups[1].Value;
+        },
+        (key, g) =>
+        {
+            return new { Id = key, Count = g.Count() };
+            //return new { Id = key, Count = g. };
+        });
     }
 
     // 2nd task
