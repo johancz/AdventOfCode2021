@@ -44,7 +44,8 @@ namespace Shared
 
                 await stream.CopyToAsync(file);
                 var a = await response.Content.ReadAsStringAsync();
-                inputData = (await response.Content.ReadAsStringAsync()).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                //inputData = (await response.Content.ReadAsStringAsync()).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                inputData = (await response.Content.ReadAsStringAsync()).Split('\n');
             }
 
             return inputData;
@@ -60,7 +61,7 @@ namespace Shared
             return await File.ReadAllLinesAsync(inputFilePath);
         }
 
-        public async static Task<string> GetExampleInput(int year, int day, bool overwrite = false)
+        public async static Task<string> GetExampleInput(int year, int day, int nthCodeBlock = 0, bool overwrite = false)
         {
             string inputFilePath = Path.Combine(Data.InputFileDirPath, $"input-{year}-{day}-page.html");
             bool fileExists = File.Exists(inputFilePath);
@@ -68,8 +69,23 @@ namespace Shared
 
             if (overwrite || !fileExists || fileExists && string.IsNullOrWhiteSpace(inputData))
             {
+                Console.WriteLine("Downloading example data from source (\"adventofcode.com\")");
+                var uri = new Uri("https://adventofcode.com");
+
                 // Web scraping stuff
                 HtmlWeb web = new HtmlWeb();
+                web.UseCookies = true;
+                web.PreRequest = new HtmlWeb.PreRequestHandler(request =>
+                {
+                    request.CookieContainer = new CookieContainer();
+                    string sessionCookie = GetSessionCookie(Data.SesssionCookiePath).Result;
+                    if (string.IsNullOrWhiteSpace(sessionCookie))
+                    {
+                        throw new Exception("Could not load session cookie");
+                    }
+                    request.CookieContainer.Add(uri, new Cookie("session", sessionCookie));
+                    return true;
+                });
                 HtmlDocument doc = web.Load($"https://adventofcode.com/{year}/day/{day}");
 
                 // File stuff
@@ -93,21 +109,32 @@ namespace Shared
             var doc2 = new HtmlDocument();
             doc2.LoadHtml(inputData);
 
-            var articleNode = doc2.DocumentNode.SelectSingleNode("/html/body/main/article");
+            var mainNode = doc2.DocumentNode.SelectSingleNode("/html/body/main");
 
-            if (articleNode == null)
+            if (mainNode == null)
             {
-                throw new Exception($"Could not find the <article> node in today's page source.");
+                throw new Exception($"Could not find the <main> node in today's page source.");
             }
 
-            var codeNode = articleNode.ChildNodes.FirstOrDefault(x => x.Name == "pre" && x.FirstChild?.Name == "code")?.FirstChild;
-
-            if (codeNode == null)
+            try
             {
-                throw new Exception($"Could not find a single 'pre > code' node in today's page source.");
+                var codeNode = nthCodeBlock == 0
+                    ? mainNode.ChildNodes.FirstOrDefault(x => x.Name == "pre" && x.FirstChild?.Name == "code")?.FirstChild
+                    : mainNode.SelectNodes("//article/pre/code").ElementAt(nthCodeBlock);
+
+                if (codeNode == null)
+                {
+                    throw new Exception($"Could not find a single 'pre > code' node in today's page source.");
+                }
+
+                return codeNode.InnerText;
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
-            return codeNode.InnerText;
         }
 
 
